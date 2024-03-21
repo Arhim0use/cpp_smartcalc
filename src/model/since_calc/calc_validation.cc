@@ -83,34 +83,48 @@ namespace s21 {
 
   bool SmartCalc::IsValidOperator(const std::string &str, int at_pos) const {
     /* valid -asin  -(   ((  (0  (-  ))  )-  )\0 -- +- *- /- ^- */
-    bool result = true;
+    bool result = false;
     auto it = str.begin() + at_pos;
     if (str[at_pos] == ')' && it == (str.end() - 1)) {
-      return result;
-    } else if (IsOperator(str[at_pos])/*  && (IsDigit(str[at_pos + 1]) || str[at_pos + 1] == '(' || IsLetter(str[at_pos + 1]))              это True но хочу по другому попробовать*/) { 
-      if (str[at_pos] == '-' && IsOperator(str[at_pos + 1])) result = true;
-      else if (str[at_pos] == '-' && str[at_pos + 1] == ')') result = false;
-      
-      return result;
+      result = true;
+    } else if (IsOperator(str[at_pos])) { 
+      result = IsValidUnari(str[at_pos + 1]);
     } else if (str[at_pos] == '(' && (str[at_pos + 1] == '(' || 
-                str[at_pos + 1] == '-' || IsDigit(str[at_pos + 1]))) {
-      return result;
+                str[at_pos + 1] == '-' || IsLetter(str[at_pos + 1]) || IsDigit(str[at_pos + 1]))) {
+      result = true;
     } else if (str[at_pos] == ')' && (str[at_pos + 1] == ')' || IsOperator(str[at_pos + 1]))) {
-      return result;
+      result = true;
+    } else {
+      result = false;
     }
-    result = false;
     
     return result;
   }
 
-  bool SmartCalc::IsValidString(const std::string &str) const {
+  bool SmartCalc::IsValidUnari(const char second) const noexcept {
+    /* valid -asin  -(   ((  (0  (-  ))  )-  )\0 -- +- *- /- ^- */
+    bool result = false;
+    if (second == '-' || IsLetter(second) || IsDigit(second) || second == '(') {
+      result = true;
+    } else if (IsOperator(second) || second == ')') {
+      result = false;
+    } 
+    return result;
+  }
+  
+  bool SmartCalc::IsValidString(const std::string &str){
     bool result = true;
     // bool operator_flag = false;
     int count_parthensis = 0;
     std::string token = "";
     auto it_begin = str.begin();
     for (auto it = str.begin(); it != str.end() && result; ++it){
-      if (it == str.begin() && (*it == '-' || *it == '+' )) ++it;
+      if (it == str.begin() && *it == '-' && IsValidUnari(str[1])) ++it;
+      else if (it == str.begin() && IsOperator(*it))
+      {
+        result = false;
+      }
+      
 
       if (IsDigit(*it) || IsDot(*it)) {
         token.push_back(*it);
@@ -135,18 +149,20 @@ namespace s21 {
         }
       }
 
-      if (IsOperator(*it) || IsParenthesis(*it)){
-        result = IsValidOperator(str, /* std::distance(it_begin, it) */ it.base() - it_begin.base());
+      if (result && (IsOperator(*it) || IsParenthesis(*it))){
+        result = IsValidOperator(str, std::distance(it_begin, it) /* it.base() - it_begin.base() */);
 
         if (result)
           result = IsValidNum(token.begin(), token.end()) || IsFunc(token);
         token.clear();
         if (count_parthensis < 0) result = false;
       }
-
+      if (!IsOperator(*it) && !IsParenthesis(*it) && !IsDigit(*it) && !IsLetter(*it) && !IsDot(*it))
+        result = false;
     }
     if (token.size()) result = IsValidNum(token.begin(), token.end());
     if (count_parthensis != 0) result = false;
+    status_ = (result ? Status::kOk : Status::kError);
     return result;
   }
 

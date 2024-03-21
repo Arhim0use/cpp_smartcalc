@@ -3,17 +3,6 @@
 
 using namespace s21;
 
-
-
-
-
-
-
-
-
-
-
-
 int main(){
 
 
@@ -31,8 +20,6 @@ void test_1(){
   std::cout << "x " << t.IsFunc(str)<< "\n";
   // std::cout << *it << "\n";
 }
-
-
 
 void test_0 (){
   std::string str = "Hello World, Privet Mir";
@@ -52,11 +39,12 @@ void test_0 (){
 void test_2(){
 
   // std::string str = "-10.02+15.2-5e-64";
-  std::string str = "+10/15.2-5e-64*sin(x)";
+  std::string str = "-/x";
   SmartCalc t;
 
   t.SetVarX(str);
-  std::cout << "x " <<   t.IsValidString(str) << "\n";
+  t.IsValidString(str);
+  std::cout << "IsValidString " <<  t.GetStatus()  << "\n";
   // std::cout << *it << "\n";
 }
 

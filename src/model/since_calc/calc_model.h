@@ -26,6 +26,9 @@ class SmartCalc {
     void SetVarX(const std::string &str) { var_x_ = str; }
     void SetCalcLine(const std::string &str) { calcus_line_ = str; }
 
+    enum Status GetStatus() const noexcept { return status_; }
+    void SetStatus(const enum Status &s) noexcept { status_ = s; }
+
     bool IsDot(const char symbol) const noexcept;
     bool IsDigit(const char symbol) const noexcept;
     bool IsLetter(const char symbol) const noexcept;
@@ -34,11 +37,12 @@ class SmartCalc {
 
     bool IsFunc(const std::string &str) const noexcept;
     bool IsValidVarX(const std::string &str) const noexcept;
+    bool IsValidUnari(const char second) const noexcept;
     bool IsValidNum(std::string::const_iterator it, std::string::const_iterator it_end) const noexcept;
     bool IsValidExpNotation(std::string::const_iterator it, std::string::const_iterator it_end) const noexcept;
     bool IsValidOperator(const std::string &str, int at_pos) const;
 
-    bool IsValidString(const std::string &str) const;
+    bool IsValidString(const std::string &str);
   private:
     double db_var_x;
     std::string var_x_;
