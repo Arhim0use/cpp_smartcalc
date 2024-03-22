@@ -1,4 +1,4 @@
-CC				=	g++ -g
+CC				=	g++
 CFLAGS		=	-Wall -Wextra -std=c++17
 WE 				= -Werror
 FSAN 			= -fsanitize=address 
@@ -7,17 +7,19 @@ LDFLAGS = -lgtest -pthread
 GCFLAGS = -fprofile-arcs -ftest-coverage
 VG_FLAGS =	--vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose
 
-SRC	= $(wildcard ./model/since_calc/calc_validation.cc) 
-OBJ	= $(patsubst ./model/since_calc/calc_validation.cc, ./model/since_calc/calc_validation.o, ${SRC})
+# SRC	= $(wildcard ./model/since_calc/calc_validation.cc) 
+# OBJ	= $(patsubst ./model/since_calc/calc_validation.cc, ./model/since_calc/calc_validation.o, ${SRC})
 # SRC	= $(wildcard ./model/*/*.cc) 
 # OBJ	= $(patsubst ./model/*/*.cc, ./model/*/*.o, ${SRC})
+SRC	= $(wildcard ./model/since_calc/*.cc) 
+OBJ	= $(patsubst ./model/since_calc/%.cc, ./model/since_calc/%.o, ${SRC})
 TEST = test
 LIB = lsmart_calc_oop.a
 FILE_TEST =	$(wildcard ./unit_test/s21_*.cc)
 all: clean mcc
 
 mcc: 
-	$(CC) $(CFLAGS) main.cc model/since_calc/*.cc 
+	$(CC) -g $(CFLAGS) main.cc $(SRC) 
 	./a.out
 
 $(LIB):
