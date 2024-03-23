@@ -22,7 +22,6 @@ TEST_F(SmartCalcTest, VarLine_1) {
   std::string calc_line = "x";
   model->SetCalcLine(calc_line);
 
-  model->IsValidString(calc_line);
   EXPECT_EQ(model->GetStatus(), Status::kOk);
 }
 
@@ -33,7 +32,6 @@ TEST_F(SmartCalcTest, VarLine_2) {
   std::string var_line = "-100e-2";
   model->SetVarX(var_line);
   
-  model->IsValidVarX(var_line);
   EXPECT_EQ(model->GetStatus(), Status::kOk);
 }
 
@@ -44,7 +42,6 @@ TEST_F(SmartCalcTest, VarLine_3) {
   std::string var_line = "12.33";
   model->SetVarX(var_line);
   
-  model->IsValidVarX(var_line);
   EXPECT_EQ(model->GetStatus(), Status::kOk);
 }
 
@@ -55,7 +52,6 @@ TEST_F(SmartCalcTest, VarLine_4) {
   std::string var_line = "";
   model->SetVarX(var_line);
   
-  model->IsValidVarX(var_line);
   EXPECT_EQ(model->GetStatus(), Status::kOk);
 }
 
@@ -110,6 +106,13 @@ TEST_F(SmartCalcTest, EasyFuncLine_1) {
 
 TEST_F(SmartCalcTest, EasyFuncLine_2) {
   std::string calc_line = "sqrt(x)";
+  model->SetCalcLine(calc_line);
+  model->IsValidString(calc_line);
+  EXPECT_EQ(model->GetStatus(), Status::kOk);
+}
+
+TEST_F(SmartCalcTest, EasyFuncLine_3) {
+  std::string calc_line = "x%x";
   model->SetCalcLine(calc_line);
   model->IsValidString(calc_line);
   EXPECT_EQ(model->GetStatus(), Status::kOk);

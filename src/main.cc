@@ -6,22 +6,23 @@ using namespace s21;
 int main(){
 
 
-  test_2();
-  // test_stod();
+  // test_2();
+  test_stod();
   return 0;
 }
 
 void test_2(){
 
-  // std::string str = "-10.02+15.2-5e-64";
+  std::string str = "1.0e-sin(x)";
+  // std::string str = "sin(x)--atan(10.2)+200";
   // std::string str = "-1.23*100/sin(2.5)-(2^(ln(9)/10))";
-  std::string str = "-x+(100)";
+  // std::string str = "-x+-(-100)";
   std::string x_str = "12";
   SmartCalc t;
 
   t.SetVarX(x_str);
   t.IsValidString(str);
-  std::cout << "IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
+  std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
   // std::cout << *it << "\n";
 }
 
@@ -31,7 +32,8 @@ void test_1(){
   SmartCalc t;
 
   t.SetVarX(str);
-  std::cout << "x " << t.IsFunc(str)<< "\n";
+  t.IsValidString(str);
+  std::cout << "x " << (t.GetStatus() == kOk ? "Ok" : "Error") << "\n";
   // std::cout << *it << "\n";
 }
 
@@ -51,7 +53,8 @@ void test_0 (){
 }
 
 void test_stod (){
-  std::string orbits ("36.5e+0.105-29e-0002");
+  std::string orbits ("1.0e-(0.1)-sin(x)-29e-0002");
+  // std::string orbits ("36.5e+0.105-29e-0002");
   std::string::size_type sz;     // alias of size_t
 
   double earth = std::stod (orbits,&sz);

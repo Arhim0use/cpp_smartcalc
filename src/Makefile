@@ -9,8 +9,7 @@ VG_FLAGS =	--vgdb=no --leak-check=full --show-leak-kinds=all --track-origins=yes
 
 # SRC	= $(wildcard ./model/since_calc/calc_validation.cc) 
 # OBJ	= $(patsubst ./model/since_calc/calc_validation.cc, ./model/since_calc/calc_validation.o, ${SRC})
-# SRC	= $(wildcard ./model/*/*.cc) 
-# OBJ	= $(patsubst ./model/*/*.cc, ./model/*/*.o, ${SRC})
+
 SRC	= $(wildcard ./model/since_calc/*.cc) 
 OBJ	= $(patsubst ./model/since_calc/%.cc, ./model/since_calc/%.o, ${SRC})
 TEST = test

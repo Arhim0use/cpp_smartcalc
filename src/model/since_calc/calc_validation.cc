@@ -9,19 +9,19 @@ namespace s21 {
     return (symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z'); 
   }
   
-  bool SmartCalc::IsFunc(const std::string &str) const noexcept {
-    std::string function[11] = {"mod",  "sin",  "cos",  "tan", "asin",
-                        "acos", "atan", "sqrt", "log", "ln"};
-    bool result = false;
-    for(int i = 0; i < 11 && !result ; i++){
-      result = str == function[i];
-    }
-    return result;
-  }
+  // bool SmartCalc::IsFunc(const std::string &str) const noexcept {
+  //   std::string function[11] = {"mod",  "sin",  "cos",  "tan", "asin",
+  //                       "acos", "atan", "sqrt", "log", "ln"};
+  //   bool result = false;
+  //   for(int i = 0; i < 11 && !result ; i++){
+  //     result = str == function[i];
+  //   }
+  //   return result;
+  // }
   
   bool SmartCalc::IsOperator(const char symbol) const noexcept {
     return (symbol == '+' || symbol == '-' || symbol == '*' 
-      || symbol == '/' || symbol == '^'); 
+      || symbol == '/' || symbol == '^' || symbol == '%'); 
   }
   
   bool SmartCalc::IsParenthesis(const char symbol) const noexcept {
