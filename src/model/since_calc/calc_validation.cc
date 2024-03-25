@@ -9,16 +9,6 @@ namespace s21 {
     return (symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z'); 
   }
   
-  // bool SmartCalc::IsFunc(const std::string &str) const noexcept {
-  //   std::string function[11] = {"mod",  "sin",  "cos",  "tan", "asin",
-  //                       "acos", "atan", "sqrt", "log", "ln"};
-  //   bool result = false;
-  //   for(int i = 0; i < 11 && !result ; i++){
-  //     result = str == function[i];
-  //   }
-  //   return result;
-  // }
-  
   bool SmartCalc::IsOperator(const char symbol) const noexcept {
     return (symbol == '+' || symbol == '-' || symbol == '*' 
       || symbol == '/' || symbol == '^' || symbol == '%'); 
@@ -115,6 +105,14 @@ namespace s21 {
       status_ = kError;
     }
   
+  }
+
+  std::string SmartCalc::ToLower(const std::string &str) noexcept {
+    std::string lower_str = str;
+    for (size_t i = 0; i < lower_str.size(); i++) {
+      if (lower_str[i] >= 'A' && lower_str[i] <= 'Z') lower_str[i] = lower_str[i] + 32; 
+    }
+    return lower_str;
   }
 
   void SmartCalc::IsValidUnari(const char second) noexcept {

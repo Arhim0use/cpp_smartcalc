@@ -6,24 +6,36 @@ using namespace s21;
 int main(){
 
 
-  // test_2();
-  test_stod();
+  // test_1();
+  test_2();
+  // test_stod();
   return 0;
 }
 
 void test_2(){
 
-  std::string str = "1.0e-sin(x)";
+  // std::string str = "1*2/sin(3)-(4^(ln(5)/6))";
+  // std::string str = "2/sin(1)-(4^(5/6))";
+  std::string str = "2/sin(x-4/6";
   // std::string str = "sin(x)--atan(10.2)+200";
-  // std::string str = "-1.23*100/sin(2.5)-(2^(ln(9)/10))";
-  // std::string str = "-x+-(-100)";
-  std::string x_str = "12";
+  // std::string str = "sqrt(x)*(x+tan(sin(2*x-x)+cos(8-x)))";
+  // std::string str = "1-2";
+  std::string x_str = "10";
+  double x = 10;
   SmartCalc t;
 
   t.SetVarX(x_str);
-  t.IsValidString(str);
+  // t.IsValidString(str);
+  // t.ShuntingYard();
+  // t.Calculation();
+  double res = t.ProcessAndCalculate(str);
+  double expect = (2 / sin(x) - 4.0 / 6.0);
+
   std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
-  // std::cout << *it << "\n";
+  std::cout << "res " << res <<  " expect " << expect << "\n";
+
+  // str = "1 2 * 3 sin / 4 5 log 6 / ^ - \n";
+  // std::cout << str;
 }
 
 void test_1(){
@@ -32,8 +44,9 @@ void test_1(){
   SmartCalc t;
 
   t.SetVarX(str);
-  t.IsValidString(str);
+  double res = t.ProcessAndCalculate(str);
   std::cout << "x " << (t.GetStatus() == kOk ? "Ok" : "Error") << "\n";
+  std::cout << "res " << res << "\n";
   // std::cout << *it << "\n";
 }
 

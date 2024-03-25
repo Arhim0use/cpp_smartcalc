@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+#include <math.h>
+
 namespace s21 {
 const size_t kmax_size = 256;
 
@@ -48,13 +50,15 @@ class SmartCalc {
       }
     }
 
-    void SetCalcLine(const std::string &str) { calcus_line_ = str; }
+    // void SetCalcLine(const std::string &str) { calcus_line_ = str; }
+    double ProcessAndCalculate(const std::string &str);
+    int GetStatus() const noexcept { return status_; }
 
-    enum Status GetStatus() const noexcept { return status_; }
+
+    int GetPriority(const int token_type) const noexcept;
 
 
 
-    void IsValidString(const std::string &str);
   private:
     double db_var_x_;
     std::string calcus_line_;
@@ -67,22 +71,34 @@ class SmartCalc {
     bool IsOperator(const char symbol) const noexcept;
     bool IsParenthesis(const char symbol) const noexcept;
 
-    void IsValidVarX(const std::string &str) noexcept;
     void IsValidUnari(const char second)  noexcept;
     void IsValidNum(const std::string &str) noexcept;
-    void IsValidExpNotation(std::string::const_iterator it, std::string::const_iterator it_end) noexcept;
-    void IsValidOperator(const std::string &str, int at_pos) ;
-    
+    void IsValidVarX(const std::string &str) noexcept;
+    void IsValidOperator(const std::string &str, int at_pos);
+    void IsValidExpNotation(std::string::const_iterator it, 
+                            std::string::const_iterator it_end) noexcept;
+    std::string ToLower(const std::string &str) noexcept;
+    void IsValidString(const std::string &str);
+
     bool IsFunc(const std::string &str);
 
     int GetType(const char ch) const;
-    void PushFirstUnari(std::string::const_iterator *it, const char ch);
-    void PushOperator(const std::string &str, int at_pos);
-    void PushOpenParenthesis(const char ch, int *count_parthensis);
-    void PushCloseParenthesis(const char ch, int *count_parthensis);
-    void PushNum(const std::string &str);
-    void PushToken(const std::string &str, const std::string &token, std::string::const_iterator it);
+    void ParseFirstUnari(std::string::const_iterator *it, const char ch);
+    void ParseOperator(const std::string &str, int at_pos);
+    void ParseParenthesis(const char ch, int *count_parthensis);
+    void ParseNum(const std::string &str);
+    void ParseToken(const std::string &str, const std::string &token, std::string::const_iterator it);
 
+    void ShuntingYard();
+    void PushCloseParenthesis(std::pair<double, short> &token, 
+                    std::list<std::pair<double, short>> &stack, 
+                    std::list<std::pair<double, short>> &qu);
+    void PushOperator(int &priority, std::list<std::pair<double, short>> &stack, 
+                                      std::list<std::pair<double, short>> &qu, 
+                std::reverse_iterator<std::list<std::pair<double, short>>::iterator> &it);
+    
+    double FuncWork(double val_1, double val_2, int type) const;
+    double Calculation();
 };
 
 void PrintRLisr(std::list<std::pair<double, short int>> &l);

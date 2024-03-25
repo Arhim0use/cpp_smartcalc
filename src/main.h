@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>     // std::string, std::stod
 
+#include <math.h>
+
 #include "model/since_calc/calc_model.h"
 
 void test_0();
