@@ -28,7 +28,7 @@ double SmartCalc::Calculation() {
     } else if (qu.front().second == kVariable) {
       stack.push_back({db_var_x_, kVariable});
       qu.pop_front();
-    } else if (qu.front().second > kVariable) {
+    } else if (qu.front().second > kVariable ) {
       val_2 = stack.back().first;
       stack.pop_back();
       if (GetPriority(qu.front().second) != 6 /* func */) {
@@ -40,7 +40,7 @@ double SmartCalc::Calculation() {
       stack.push_back({FuncWork(val_1, val_2, qu.front().second), kNumber});
       qu.pop_front();
     }
-    if (stack.back().first == NAN || stack.back().first == INFINITY || stack.back().first == -INFINITY)
+    if (isnan(stack.back().first)|| /* stack.back().first == INFINITY || stack.back().first == -INFINITY || */ isinf(stack.back().first))
       status_ = Status::kError;
   } while (!qu.empty() && status_ == Status::kOk);
   if (status_ == Status::kError){
@@ -48,6 +48,7 @@ double SmartCalc::Calculation() {
   }
   return  stack.back().first;
 }
+  
   
 double SmartCalc::FuncWork(double val_1, double val_2, int type) const {
   double result = 0.;
@@ -63,6 +64,8 @@ double SmartCalc::FuncWork(double val_1, double val_2, int type) const {
     result = pow(val_1, val_2);
   } else if (type == kMod) {
     result = fmod(val_1, val_2);
+  } else if (type == kUnary) {
+    result = -val_2;
   } else if (type == kSin) {
     result = sin(val_2);
   } else if (type == kCos) {

@@ -37,8 +37,8 @@ void SmartCalc::ParseFirstUnari(std::string::const_iterator *it, const char ch) 
   if (**it == '-') {
     IsValidUnari(ch);
     ++(*it);
-    token_line_pair.push_front({-1, Type::kNumber});
-    token_line_pair.push_front({0, Type::kMul});
+    token_line_pair.push_front({-1, Type::kUnary});
+    // token_line_pair.push_front({0, Type::kMul});
   } else if (IsOperator(**it)) {
     status_ = kError;
   }
@@ -59,8 +59,8 @@ void SmartCalc::ParseOperator(const std::string &str, int at_pos) {
   if (status_ == Status::kOk) {
     int tp =  GetType(str[at_pos]);
     if (tp == Type::kMinus && (IsOperator(str[at_pos - 1]) || str[at_pos - 1] == '(')) {
-      token_line_pair.push_front({-1, Type::kNumber});
-      token_line_pair.push_front({0, Type::kMul});
+      token_line_pair.push_front({-1, Type::kUnary});
+      // token_line_pair.push_front({0, Type::kMul});
     }
     else if (tp) {
       token_line_pair.push_front({0, tp});
@@ -115,9 +115,9 @@ void SmartCalc::ParseToken(const std::string &str, const std::string &token, std
 }
 
 void PrintRLisr(std::list<std::pair<double, short int>> &l){
-  std::string str[19] = {"1 kNumber", "x kVariable", "+ kPlus", "- kMinus", "* kMul", 
+  std::string str[20] = {"1 kNumber", "x kVariable", "+ kPlus", "- kMinus", "* kMul", 
       "/ kDiv", "^ kPow", "% kMod", "kSin", "kCos", "kTan", "kAsin", "kAcos", 
-      "kAtan", "kSqrt", "kLog", "kLn", "( kL_parenthesis", ") kR_parenthesis"};
+      "kAtan", "kSqrt", "kLog", "kLn", "( kL_parenthesis", ") kR_parenthesis", "~ kUnary"};
   std::cout << "\n";
   for (auto it = l.rbegin(); it != l.rend(); it++) {
     std::cout << (*it).first << "\t" << str[(*it).second] << "\n";

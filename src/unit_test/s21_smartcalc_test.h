@@ -6,7 +6,16 @@
 #include "../model/since_calc/calc_model.h"
 
 namespace s21 {
-class SmartCalcTest : public testing::Test {
+class SmartCalcValidationTest : public testing::Test {
+ protected:
+  std::string* calc_line;
+  SmartCalc *model;
+
+  void SetUp();
+  void TearDown();
+};
+
+class SmartCalcCalculationTest : public testing::Test {
  protected:
   std::string* calc_line;
   SmartCalc *model;

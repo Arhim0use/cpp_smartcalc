@@ -6,64 +6,98 @@ using namespace s21;
 int main(){
 
 
+  test_0();
+  // test_2();
   // test_1();
-  test_2();
+  // test_3();
   // test_stod();
   return 0;
 }
 
 void test_2(){
 
-  // std::string str = "1*2/sin(3)-(4^(ln(5)/6))";
-  // std::string str = "2/sin(1)-(4^(5/6))";
-  std::string str = "2/sin(x-4/6";
-  // std::string str = "sin(x)--atan(10.2)+200";
-  // std::string str = "sqrt(x)*(x+tan(sin(2*x-x)+cos(8-x)))";
-  // std::string str = "1-2";
-  std::string x_str = "10";
-  double x = 10;
   SmartCalc t;
+  double x = -10;
+  std::string x_str = "-10";
+
+  std::string str = "sqrt(4)-2";
+  double expect = sqrt(4)-2;
+  // std::string str = "-sqrt(4)+-10*-(1/2)";
+  // double expect = -sqrt(4)+-10*-(1./2.);
+  // std::string str = "-(1+4^-2-(-4+-10*-(1/2)*2))";
+  // double expect = -(1+pow(4,-2)-(-4+-10*-(1/2)*2));
 
   t.SetVarX(x_str);
-  // t.IsValidString(str);
-  // t.ShuntingYard();
-  // t.Calculation();
+
   double res = t.ProcessAndCalculate(str);
-  double expect = (2 / sin(x) - 4.0 / 6.0);
+
 
   std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
-  std::cout << "res " << res <<  " expect " << expect << "\n";
+  std::cout << "res " << res <<  " expect " << expect << (res == expect ? " Ok" : " Error") << "\n";
+}
 
-  // str = "1 2 * 3 sin / 4 5 log 6 / ^ - \n";
-  // std::cout << str;
+void test_0(){
+
+  SmartCalc t;
+  double x = -10;
+  std::string x_str = "-10";
+
+  std::string str = "sqrt(x)";
+  double expect = sqrt(x);
+
+  t.SetVarX(x_str);
+  double res = t.ProcessAndCalculate(str);
+
+  std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
+  std::cout << "res " << res <<  " expect " << expect << (res == expect ? " Ok" : " Error") << "\n";
 }
 
 void test_1(){
 
-  std::string str = "aasin";
   SmartCalc t;
+  double x = -10;
+  std::string x_str = "-10";
 
-  t.SetVarX(str);
+  std::string str = "-sqrt(4)+-10*-(1/2)";
+  double expect = -sqrt(4)+-10*-(1./2.);
+
+  t.SetVarX(x_str);
   double res = t.ProcessAndCalculate(str);
-  std::cout << "x " << (t.GetStatus() == kOk ? "Ok" : "Error") << "\n";
-  std::cout << "res " << res << "\n";
-  // std::cout << *it << "\n";
+
+  std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
+  std::cout << "res " << res <<  " expect " << expect << (res == expect ? " Ok" : " Error") << "\n";
 }
 
-void test_0 (){
-  std::string str = "Hello World, Privet Mir";
-  // const std::string::iterator cit = str.find('W');
-  auto it = str.cbegin();
-  it++;
-  // auto b = it.base();
+void test_3(){
 
-  auto x = it - str.end();
-  std::cout << "x " << x << "\n";
-  std::cout << *it << "\n";
-  std::cout << str.size() << "\n";
-  std::cout << str.capacity() << "\n";
+  SmartCalc t;
+  double x = -10;
+  std::string x_str = "-10";
 
+  std::string str = "-sqrt(4)-x";
+  double expect = -sqrt(4)-x;
+
+  t.SetVarX(x_str);
+  double res = t.ProcessAndCalculate(str);
+
+  std::cout << str << " IsValidString = " <<  (t.GetStatus() == kOk ? "Ok" : "Error")  << "\n";
+  std::cout << "res " << res <<  " expect " << expect << (res == expect ? " Ok" : " Error") << "\n";
 }
+
+// void test_0 (){
+//   std::string str = "Hello World, Privet Mir";
+//   // const std::string::iterator cit = str.find('W');
+//   auto it = str.cbegin();
+//   it++;
+//   // auto b = it.base();
+
+//   auto x = it - str.end();
+//   std::cout << "x " << x << "\n";
+//   std::cout << *it << "\n";
+//   std::cout << str.size() << "\n";
+//   std::cout << str.capacity() << "\n";
+
+// }
 
 void test_stod (){
   std::string orbits ("1.0e-(0.1)-sin(x)-29e-0002");

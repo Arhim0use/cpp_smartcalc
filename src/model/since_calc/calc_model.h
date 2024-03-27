@@ -30,6 +30,7 @@ enum Type {              // priority
   kLn,             // = 16, // 6
   kL_parenthesis,  // = 17, // 2
   kR_parenthesis,  // = 18  // 2
+  kUnary,          // = 19  // 6
 };
 
 enum Status { kOk, kError };
