@@ -3,8 +3,7 @@
 namespace s21 {
 
 void SmartCalc::ShuntingYard() {
-  // if (status_ == Status::kError) return;
-  if (!token_line_pair.size()){
+  if (!token_line_pair.size()) {
     token_line_pair.push_back({0, Type::kNumber});
     return;
   }
@@ -14,18 +13,18 @@ void SmartCalc::ShuntingYard() {
   for (auto it = token_line_pair.rbegin(); it != token_line_pair.rend(); ++it) {
     token = *it;
     int priority = GetPriority((*it).second);
-    if ((*it).second == kNumber || (*it).second == kVariable){
+    if ((*it).second == kNumber || (*it).second == kVariable) {
       qu.push_back(*it);
-    } else if (priority == 6 /* func */|| (*it).second == kL_parenthesis) {
+    } else if (priority == 6 /* func */ || (*it).second == kL_parenthesis) {
       stack.push_back(*it);
-    } else if (((*it).second >= kPlus && (*it).second <= kMod) ) {
+    } else if (((*it).second >= kPlus && (*it).second <= kMod)) {
       PushOperator(priority, stack, qu, it);
     } else if ((*it).second == kR_parenthesis) {
       auto token = *it;
       PushCloseParenthesis(token, stack, qu);
     }
   }
-    
+
   while (!stack.empty() && status_ != kError) {
     auto x = stack.back();
     qu.push_back(x);
@@ -35,9 +34,10 @@ void SmartCalc::ShuntingYard() {
   token_line_pair = qu;
 }
 
-void SmartCalc::PushOperator(int &priority, std::list<std::pair<double, short>> &stack, 
-                                          std::list<std::pair<double, short>> &qu, 
-                    std::reverse_iterator<std::list<std::pair<double, short>>::iterator> &it) {
+void SmartCalc::PushOperator(
+    int &priority, std::list<std::pair<double, short>> &stack,
+    std::list<std::pair<double, short>> &qu,
+    std::reverse_iterator<std::list<std::pair<double, short>>::iterator> &it) {
   if (!stack.empty() && priority <= GetPriority(stack.back().second)) {
     int cp_pr = priority;
     while (!stack.empty() && cp_pr <= GetPriority(stack.back().second)) {
@@ -47,11 +47,12 @@ void SmartCalc::PushOperator(int &priority, std::list<std::pair<double, short>> 
       stack.pop_back();
     }
   }
-  stack.push_back(*it); 
-
+  stack.push_back(*it);
 }
 
-void SmartCalc::PushCloseParenthesis(std::pair<double, short> &token, std::list<std::pair<double, short>> &stack, std::list<std::pair<double, short>> &qu) {
+void SmartCalc::PushCloseParenthesis(std::pair<double, short> &token,
+                                     std::list<std::pair<double, short>> &stack,
+                                     std::list<std::pair<double, short>> &qu) {
   for (; !stack.empty() && token.second != kL_parenthesis;) {
     token = stack.back();
     if (token.second != kL_parenthesis) {
@@ -68,7 +69,6 @@ int SmartCalc::GetPriority(const int token_type) const noexcept {
   } else if (token_type == kL_parenthesis || token_type == kR_parenthesis) {
     // ( )
     priority = 2;
-
   } else if (token_type >= kPlus && token_type <= kMinus) {
     // + -
     priority = 3;
@@ -78,16 +78,12 @@ int SmartCalc::GetPriority(const int token_type) const noexcept {
   } else if (token_type >= kMul && token_type <= kMod) {
     // * / %
     priority = 4;
-  } else if (token_type >= kSin && token_type <= kLn) {
-    // funk
-    priority = 6;
-  } else if (token_type == kUnary) {
-    // unary
+  } else if ((token_type >= kSin && token_type <= kLn) ||
+             token_type == kUnary) {
+    // funk && unary
     priority = 6;
   }
   return priority;
 }
 
-} // namespace s21
-
-
+}  // namespace s21

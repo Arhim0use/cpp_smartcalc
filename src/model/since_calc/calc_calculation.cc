@@ -1,34 +1,22 @@
 #include "calc_model.h"
 
-namespace s21
-{
+namespace s21 {
 
-double SmartCalc::ProcessAndCalculate(const std::string &str) {
-  double res = 0.;
-  IsValidString(str);
-  if (status_ != Status::kError) {
-    ShuntingYard();
-    res = Calculation();
-  }
-  return res;
-}
-
-double SmartCalc::Calculation() {
-  if (token_line_pair.size() == 1 && token_line_pair.back().second == kVariable){
+double SmartCalc::Calculation(std::list<std::pair<double, short>> token_list) {
+  if (token_line_pair.size() == 1 &&
+      token_line_pair.back().second == kVariable) {
     return db_var_x_;
   }
-  std::list<std::pair<double, short int>> qu = token_line_pair;
+  std::list<std::pair<double, short int>> qu = token_list;
   std::list<std::pair<double, short int>> stack;
   double val_1 = 0, val_2 = 0;
 
   do {
     if (qu.front().second == kNumber) {
       stack.push_back(qu.front());
-      qu.pop_front();
     } else if (qu.front().second == kVariable) {
       stack.push_back({db_var_x_, kVariable});
-      qu.pop_front();
-    } else if (qu.front().second > kVariable ) {
+    } else if (!stack.empty() && qu.front().second > kVariable) {
       val_2 = stack.back().first;
       stack.pop_back();
       if (GetPriority(qu.front().second) != 6 /* func */) {
@@ -38,18 +26,18 @@ double SmartCalc::Calculation() {
         val_1 = 0;
       }
       stack.push_back({FuncWork(val_1, val_2, qu.front().second), kNumber});
-      qu.pop_front();
     }
-    if (isnan(stack.back().first)|| /* stack.back().first == INFINITY || stack.back().first == -INFINITY || */ isinf(stack.back().first))
+    qu.pop_front();
+    if (isnan(stack.back().first) || isinf(stack.back().first))
       status_ = Status::kError;
   } while (!qu.empty() && status_ == Status::kOk);
-  if (status_ == Status::kError){
-    stack.push_back({0,0});
+
+  if (status_ == Status::kError) {
+    stack.push_back({0, 0});
   }
-  return  stack.back().first;
+  return stack.back().first;
 }
-  
-  
+
 double SmartCalc::FuncWork(double val_1, double val_2, int type) const {
   double result = 0.;
   if (type == kPlus) {
@@ -88,4 +76,4 @@ double SmartCalc::FuncWork(double val_1, double val_2, int type) const {
   return result;
 }
 
-} // namespace s21
+}  // namespace s21
