@@ -27,6 +27,7 @@ $(LIB): $(OBJ)
 	@	echo "|     MAKE_LIB      |"
 	@	echo "+-------------------+"
 	@	ar -rcs $(BUILD_DIR)$@ $^
+	@ mkdir tmp
 	@	find . -type f -name '*.o' | xargs -I {} sh -c 'mv {} ./tmp' 
 
 $(TEST): clean $(LIB)
@@ -41,6 +42,7 @@ clean:
 	@ echo "|     CLEAN    |"
 	@ echo "*--------------*"
 	@ rm -f ./*.info ./$(BUILD_DIR)$(LIB) ./*.out ./$(BUILD_DIR)$(TEST)
+	@ rm -rf ./tmp
 	@ find . -type f -name '*.o' | xargs -I {} sh -c 'echo "File deleted {} " && rm -f {}'
 	@ find . -type f -name '*.gcno' -or -name '*.gcda' -or -name '$(PRJ).info' \
 					| xargs -I {} sh -c 'echo "File deleted {} " && rm -f {}'
@@ -130,12 +132,12 @@ style_check:
 	@ echo "+-------------------+"
 	@ echo "|    STYLE_CHECK    |"
 	@ echo "+-------------------+"
-	@ find . -type f -name '*.cc' -or -name '*.h' | xargs -I {} sh -c 'echo "File {} checked" && clang-format -style=Google -n {}'
+	@ find . -type f -name '*.cc' -or -name '*.cpp' -or -name '*.h' | xargs -I {} sh -c 'echo "File {} checked" && clang-format -style=Google -n {}'
 	@ clang-format -style=Google -n $(FILE_TEST)
 
 style_set: clean
 	@	echo "+-------------------+"
 	@	echo "|     STYLE_SET     |"
 	@	echo "+-------------------+"
-	@	find . -type f -name '*.cc' -or -name '*.h' | xargs -I {} sh -c 'echo "File {} set Google style" && clang-format -style=Google -i {}'
+	@	find . -type f -name '*.cc' -or -name '*.cpp' -or -name '*.h' | xargs -I {} sh -c 'echo "File {} set Google style" && clang-format -style=Google -i {}'
 	@	clang-format -style=Google -i $(FILE_TEST)

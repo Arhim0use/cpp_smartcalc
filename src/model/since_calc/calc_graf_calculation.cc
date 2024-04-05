@@ -13,7 +13,7 @@ std::vector<std::vector<double>> SmartCalc::GrafCalculation(
     const std::string &str, unsigned int accuracy, double start_pos,
     double end_pos) {
   token_line_pair.clear();
-  status_ = kOk;
+
   std::vector<std::vector<double>> graf(3, std::vector<double>(accuracy));
   IsValidString(str);
   if (status_ == kOk) {
